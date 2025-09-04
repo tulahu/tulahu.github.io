@@ -1,0 +1,184 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f4f6fa;
+    color: #222;
+}
+
+.container {
+    display: flex;
+    min-height: 90vh;
+}
+
+.sidebar {
+    background: #2d3a4b;
+    color: #fff;
+    width: 220px;
+    padding: 2em 1em;
+}
+
+.sidebar h2 {
+    margin-top: 0;
+    font-size: 1.3em;
+    letter-spacing: 2px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    margin: 1em 0;
+}
+
+.sidebar a {
+    color: #b8e0ff;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.sidebar a:hover {
+    color: #fff;
+}
+
+.content {
+    flex: 1;
+    padding: 2em;
+}
+
+.project-list {
+    display: flex;
+    gap: 2em;
+    flex-wrap: wrap;
+}
+
+.project-list article {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px #0001;
+    padding: 1em;
+    width: 250px;
+}
+
+footer {
+    text-align: center;
+    padding: 1em 0;
+    background: #e3e8f0;
+    color: #555;
+    font-size: 0.9em;
+}
+
+@media (max-width: 700px) {
+    .container {
+        flex-direction: column;
+    }
+
+    /* PlayerStats search and filter UI */
+    .stats-filters {
+        display: flex;
+        gap: 1em;
+        margin-bottom: 1em;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .stats-searchbar {
+        padding: 0.4em 0.8em;
+        border: 1px solid #b0c4de;
+        border-radius: 4px;
+        font-size: 1em;
+    }
+
+    .stats-date-select {
+        padding: 0.4em 0.8em;
+        border: 1px solid #b0c4de;
+        border-radius: 4px;
+        font-size: 1em;
+    }
+
+    @media (max-width: 700px) {
+        .stats-filters {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.5em;
+        }
+    }
+
+    .sidebar {
+        width: 100%;
+        text-align: center;
+    }
+
+    .content {
+        padding: 1em;
+    }
+
+    .project-list {
+        flex-direction: column;
+        gap: 1em;
+    }
+}
+
+/* Responsive Table Styles */
+.responsive-table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-bottom: 1em;
+}
+
+.responsive-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.responsive-table th,
+.responsive-table td {
+    padding: 0.5em 0.7em;
+    border: 1px solid #e0e0e0;
+    text-align: left;
+}
+
+.responsive-table th {
+    background: #f7f7fa;
+    font-weight: 600;
+}
+
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+    margin-top: 1em;
+}
+
+.pagination-controls button {
+    background: #4f8cff;
+    color: #fff;
+    border: none;
+    padding: 0.4em 1.2em;
+    border-radius: 4px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.pagination-controls button:disabled {
+    background: #b0c4de;
+    cursor: not-allowed;
+}
+
+@media (max-width: 700px) {
+
+    .responsive-table th,
+    .responsive-table td {
+        padding: 0.4em 0.3em;
+        font-size: 0.95em;
+    }
+
+    .responsive-table {
+        font-size: 0.95em;
+    }
+}
