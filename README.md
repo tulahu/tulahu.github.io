@@ -1,63 +1,63 @@
 
-# Instagram Follower Fight Statistics Website
+# Instagram Дагагчдын Тулааны Статистикийн Вэб Сайт
 
-This project is a web application that visualizes statistics from Instagram follower "fight" data. Users can search for their Instagram username to find their own stats, filter by date or view all-time results, and see overall rankings and daily summaries based on the uploaded data.
+Энэ төсөл нь Instagram дагагчдын "тулаан" мэдээллийг дүрслэн харуулдаг вэб аппликейшн юм. Хэрэглэгчид өөрсдийн Instagram хэрэглэгчийн нэрээр хайлт хийж статистикаа харах, огноогоор шүүх эсвэл бүх цаг үеийн үр дүнг үзэх боломжтой. Мөн нийт онооны жагсаалт болон өдөр тутмын хураангуйг харах боломжтой.
 
 
-## Project Structure
+## Төслийн бүтэц
 
 ```
 player-stats-site
 ├── public
-│   ├── index.html          # Main HTML document for the website
-│   └── data.json           # JSON file containing Instagram fight statistics
+│   ├── index.html          # Вэб сайтын үндсэн HTML файл
+│   └── data.json           # Instagram тулааны статистик агуулсан JSON файл
 ├── src
-│   ├── App.js              # Main React app file
-│   ├── index.js            # React entry point
-│   ├── components          # React components (PlayerStats, RankingTable, DailySummary, etc.)
+│   ├── App.js              # Үндсэн React апп файл
+│   ├── index.js            # React-ийн эхлэлийн цэг
+│   ├── components          # React компонентууд (PlayerStats, RankingTable, DailySummary гэх мэт)
 │   └── styles
-│       └── main.css        # CSS styles for the application
-├── package.json            # Project configuration
-└── README.md               # Documentation for the project
+│       └── main.css        # Аппликейшний CSS загварууд
+├── package.json            # Төслийн тохиргоо
+└── README.md               # Төслийн баримт бичиг
 ```
 
 
-## Features
+## Онцлог
 
-- Search for your Instagram username to find your fight stats
-- Filter stats by date or view "All Time" results
-- Paginated and responsive tables for easy browsing
-- View overall player rankings and daily summaries
+- Instagram хэрэглэгчийн нэрээр хайлт хийж тулааны статистикаа харах
+- Огноогоор шүүх эсвэл "Бүх цаг үе"-ийн үр дүнг үзэх
+- Хуудаслагдсан, хариу үйлдэлтэй хүснэгтүүдээр хялбар үзэх
+- Нийт тоглогчдын онооны жагсаалт болон өдөр тутмын хураангуйг харах
 
 
-## Getting Started
+## Эхлэх заавар
 
-1. Clone the repository:
+1. Репозиторийг хуулбарлах:
    ```
    git clone https://github.com/yourusername/player-stats-site.git
    ```
-2. Navigate to the project directory:
+2. Төслийн хавтас руу орох:
    ```
    cd player-stats-site
    ```
-3. Install dependencies:
+3. Хамааралтай модулиудыг суулгах:
    ```
    npm install
    ```
-4. Start the development server:
+4. Хөгжүүлэлтийн серверийг эхлүүлэх:
    ```
    npm start
    ```
-5. Open your browser and go to `http://localhost:3000` to view the website.
+5. Хөтөч дээр `http://localhost:3000` хаягаар орж вэб сайтыг үзэх.
 
 
-## Usage
+## Хэрэглээ
 
-- Enter your Instagram username in the search bar to look up your fight statistics.
-- Filter by date or select "All Time" to see your stats for a specific day or overall.
-- Browse the rankings and daily summaries to see how you and others performed.
+- Хайлтын хэсэгт Instagram хэрэглэгчийн нэрээ оруулж тулааны статистикаа харах
+- Огноогоор шүүх эсвэл "Бүх цаг үе"-ийг сонгож тухайн өдөр эсвэл нийт үр дүнг үзэх
+- Онооны жагсаалт болон өдөр тутмын хураангуйг үзэж өөрийн болон бусдын гүйцэтгэлийг харьцуулах
 
 
-## License
+## Лиценз
 
-This project is licensed under the MIT License.
+Энэ төсөл MIT лицензтэй.

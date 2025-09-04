@@ -1,19 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function PlayerStats({ stats }) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [search, setSearch] = useState("");
-  const [selectedDate, setSelectedDate] = useState("All Time");
   const rowsPerPage = 10;
 
-  // Get unique dates for dropdown
+  // Get unique dates and sort descending
   const allDates = Array.from(new Set(stats.map(s => s.date)));
   allDates.sort((a, b) => new Date(b) - new Date(a));
+
+  // Default to latest date
+  const [selectedDate, setSelectedDate] = useState(allDates[0] || 'All Time');
+  const [search, setSearch] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Filter by player name and date
   const filteredStats = stats.filter(entry => {
     const matchesName = entry.player.toLowerCase().includes(search.toLowerCase());
-    const matchesDate = selectedDate === "All Time" || entry.date === selectedDate;
+    const matchesDate = selectedDate === 'All Time' || entry.date === selectedDate;
     return matchesName && matchesDate;
   });
 
@@ -27,17 +29,17 @@ function PlayerStats({ stats }) {
   };
 
   // Reset to page 1 when filters change
-  React.useEffect(() => {
+  useEffect(() => {
     setCurrentPage(1);
   }, [search, selectedDate]);
 
   return (
     <div className="responsive-table-container">
-      <h2>🔍 Player Stats</h2>
+      <h2>🔍 Тоглогчийн статистик</h2>
       <div className="stats-filters">
         <input
           type="text"
-          placeholder="Search player name..."
+          placeholder="Нэрээр хайх..."
           value={search}
           onChange={e => setSearch(e.target.value)}
           className="stats-searchbar"
@@ -47,26 +49,27 @@ function PlayerStats({ stats }) {
           onChange={e => setSelectedDate(e.target.value)}
           className="stats-date-select"
         >
-          <option value="All Time">All Time</option>
+          <option value="All Time">Бүх цаг үе</option>
           {allDates.map(date => (
             <option key={date} value={date}>{date}</option>
           ))}
         </select>
       </div>
+
       <table className="responsive-table" border="1" cellPadding="8">
         <thead>
           <tr>
-            <th>Date</th>
-            <th>Player</th>
-            <th>Kills</th>
-            <th>Deaths</th>
-            <th>Nemesis</th>
-            <th>Victim</th>
+            <th>Огноо</th>
+            <th>Тоглогч</th>
+            <th>Алуур</th>
+            <th>Үхэл</th>
+            <th>Дайсан</th>
+            <th>Хохирогч</th>
           </tr>
         </thead>
         <tbody>
           {currentRows.length === 0 ? (
-            <tr><td colSpan="6" style={{textAlign:'center'}}>No results found.</td></tr>
+            <tr><td colSpan="6" style={{ textAlign: 'center' }}>Үр дүн олдсонгүй.</td></tr>
           ) : (
             currentRows.map((entry, i) => (
               <tr key={startIdx + i}>
@@ -81,15 +84,22 @@ function PlayerStats({ stats }) {
           )}
         </tbody>
       </table>
-      <div className="pagination-controls">
+
+      <div className="pagination-controls" style={{ marginTop: '1em' }}>
+        <button onClick={() => goToPage(1)} disabled={currentPage === 1}>
+          Эхлэл
+        </button>
         <button onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>
-          Previous
+          Өмнөх
         </button>
         <span style={{ margin: '0 1em' }}>
-          Page {currentPage} of {totalPages}
+          Хуудас {currentPage} / {totalPages}
         </span>
         <button onClick={() => goToPage(currentPage + 1)} disabled={currentPage === totalPages}>
-          Next
+          Дараах
+        </button>
+        <button onClick={() => goToPage(totalPages)} disabled={currentPage === totalPages}>
+          Төгсгөл
         </button>
       </div>
     </div>

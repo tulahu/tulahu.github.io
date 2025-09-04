@@ -13,11 +13,11 @@ function App() {
     .catch(err => console.error('Fetch error:', err));
   }, []);
 
-  if (!data) return <div>Loading...</div>;
+  if (!data) return <div>Уншиж байна...</div>;
 
   return (
     <div style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
-      <h1>🎮 GitHub.io Game Stats</h1>
+      <h1>🎮 Тулах уу?</h1>
       <DailySummary summary={data.daily_summary} />
       <RankingTable ranking={data.ranking} />
       <PlayerStats stats={data.player_stats} />
