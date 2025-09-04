@@ -7,7 +7,7 @@ function App() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    fetch(`${process.env.PUBLIC_URL}/data.json`)
+    fetch(`${process.env.PUBLIC_URL}/daily_stats.json`)
     .then(res => res.json())
     .then(setData)
     .catch(err => console.error('Fetch error:', err));
