@@ -68,7 +68,7 @@ function DailySummary({ summary }) {
                     <Tooltip title={day.winner} placement="top-start">
                       <Chip 
                         label={day.winner} 
-                        color="primary" 
+                        color="white" 
                         variant="outlined"
                         size="small"
                         sx={{ fontSize: '0.7rem', maxWidth: '100%' }}

@@ -157,7 +157,7 @@ function RankingTable({ ranking, searchPlayer }) {
                     <Chip 
                       label={entry.rank === 0 ? 1 : entry.rank} 
                       color={
-                        entry.rank === 1 ? 'primary' : 
+                        entry.rank === 0 ? 'primary' : 
                         entry.rank <= 3 ? 'secondary' : 'default'
                       } 
                       variant={entry.rank <= 3 ? 'filled' : 'outlined'}
@@ -167,7 +167,7 @@ function RankingTable({ ranking, searchPlayer }) {
                   </TableCell>
                   <TableCell sx={{ py: 1, fontSize: '0.75rem' }}>
                     {entry.time === null
-                      ? <Chip icon={<EmojiEvents />} label="Ялагч" color="success" size="small" sx={{ fontSize: '0.7rem' }} />
+                      ? <Chip icon={<EmojiEvents />} color="success" size="small" sx={{ fontSize: '0.7rem' }} />
                       : formatTime(timeToSeconds(entry.time))}
                   </TableCell>
                 </TableRow>
