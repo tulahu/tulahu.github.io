@@ -155,7 +155,7 @@ function RankingTable({ ranking, searchPlayer }) {
                   </TableCell>
                   <TableCell sx={{ py: 1, textAlign: 'center' }}>
                     <Chip 
-                      label={entry.rank} 
+                      label={entry.rank === 0 ? 1 : entry.rank} 
                       color={
                         entry.rank === 1 ? 'primary' : 
                         entry.rank <= 3 ? 'secondary' : 'default'
