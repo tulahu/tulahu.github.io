@@ -9,7 +9,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
   Box,
   Chip,
   IconButton,
@@ -18,15 +17,10 @@ import {
 import { Person, FirstPage, LastPage, NavigateBefore, NavigateNext } from '@mui/icons-material';
 import { ThemeContext } from '../App';
 
-function PlayerStats({ stats, searchPlayer }) {
+function PlayerStats({ stats, searchPlayer, selectedDate }) {
   const { darkMode } = useContext(ThemeContext);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [selectedDate, setSelectedDate] = useState('All Time');
-
-  // Get unique dates and sort descending
-  const allDates = Array.from(new Set(stats.map(s => s.date)));
-  allDates.sort((a, b) => new Date(b) - new Date(a));
 
   // Filter by player name and date
   const filteredStats = stats
@@ -69,25 +63,6 @@ function PlayerStats({ stats, searchPlayer }) {
           <Typography variant="h6" component="h2" sx={{ fontSize: '1rem' }}>
             Тоглогчийн статистик
           </Typography>
-        </Box>
-        
-        <Box sx={{ mb: 2 }}>
-          <TextField
-            fullWidth
-            select
-            value={selectedDate}
-            onChange={e => setSelectedDate(e.target.value)}
-            SelectProps={{
-              native: true,
-            }}
-            size="small"
-            sx={{ fontSize: '0.75rem' }}
-          >
-            <option value="All Time">Бүх цаг үе</option>
-            {allDates.map(date => (
-              <option key={date} value={date}>{date}</option>
-            ))}
-          </TextField>
         </Box>
 
         <TableContainer>

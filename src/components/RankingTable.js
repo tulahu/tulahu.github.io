@@ -9,7 +9,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
   Box,
   Chip,
   IconButton,
@@ -57,19 +56,16 @@ const formatTime = (seconds) => {
   return `${mins}:${secs.padStart(5, '0')}`; // Format as M:SS.ss
 };
 
-function RankingTable({ ranking, searchPlayer }) {
+function RankingTable({ ranking, searchPlayer, selectedDate }) {
   const { darkMode } = useContext(ThemeContext);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [searchDate, setSearchDate] = useState('');
-
-  const uniqueDates = [...new Set(ranking.map(entry => entry.date))].sort().reverse();
 
   // Filter by player name and date
   const filteredRanking = ranking
     .filter(entry => {
       const matchesPlayer = entry.player.toLowerCase().includes(searchPlayer.toLowerCase());
-      const matchesDate = searchDate ? entry.date === searchDate : true;
+      const matchesDate = selectedDate === 'All Time' || entry.date === selectedDate;
       return matchesPlayer && matchesDate;
     })
     // Sort by date (newest first) and then by rank (lowest first)
@@ -106,25 +102,6 @@ function RankingTable({ ranking, searchPlayer }) {
           <Typography variant="h6" component="h2" sx={{ fontSize: '1rem' }}>
             Тоглогчдын зэрэглэл
           </Typography>
-        </Box>
-
-        <Box sx={{ mb: 2 }}>
-          <TextField
-            fullWidth
-            select
-            value={searchDate}
-            onChange={(e) => setSearchDate(e.target.value)}
-            SelectProps={{
-              native: true,
-            }}
-            size="small"
-            sx={{ fontSize: '0.75rem' }}
-          >
-            <option value="">Бүх огноо</option>
-            {uniqueDates.map((date, i) => (
-              <option key={i} value={date}>{date}</option>
-            ))}
-          </TextField>
         </Box>
 
         <TableContainer>

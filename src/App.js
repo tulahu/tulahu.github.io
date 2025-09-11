@@ -25,6 +25,7 @@ function App() {
   const [darkMode, setDarkMode] = useState(prefersDarkMode);
   const [data, setData] = useState(null);
   const [searchPlayer, setSearchPlayer] = useState('');
+  const [selectedDate, setSelectedDate] = useState('All Time');
   const [showDailySummary, setShowDailySummary] = useState(true);
 
   useEffect(() => {
@@ -42,6 +43,17 @@ function App() {
       setShowDailySummary(true);
     }
   }, [searchPlayer]);
+
+  // Get unique dates from both ranking and player stats
+  const getAllDates = () => {
+    if (!data) return [];
+    
+    const rankingDates = data.ranking.map(entry => entry.date);
+    const statsDates = data.player_stats.map(entry => entry.date);
+    const allDates = [...new Set([...rankingDates, ...statsDates])];
+    
+    return allDates.sort((a, b) => new Date(b) - new Date(a));
+  };
 
   const theme = createTheme({
     palette: {
@@ -86,6 +98,8 @@ function App() {
     );
   }
 
+  const allDates = getAllDates();
+
   return (
     <ThemeContext.Provider value={{ darkMode, toggleDarkMode }}>
       <ThemeProvider theme={theme}>
@@ -102,10 +116,11 @@ function App() {
           </Toolbar>
         </AppBar>
         <Container maxWidth="xl" sx={{ py: 2 }}>
-          <Box sx={{ mb: 2, display: 'flex', gap: 1, alignItems: 'center' }}>
+          <Box sx={{ mb: 2, display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>
             <TextField
               fullWidth
               placeholder="Тоглогчийн нэрээр хайх..."
+              type="search"
               value={searchPlayer}
               onChange={e => setSearchPlayer(e.target.value)}
               InputProps={{
@@ -116,7 +131,25 @@ function App() {
                 ),
               }}
               size="small"
+              sx={{ minWidth: '200px', flexGrow: 1 }}
             />
+            
+            <TextField
+              select
+              value={selectedDate}
+              onChange={e => setSelectedDate(e.target.value)}
+              SelectProps={{
+                native: true,
+              }}
+              size="small"
+              sx={{ display: 'flex', flexGrow: 1 }}
+            >
+              <option value="All Time">Бүх цаг үе</option>
+              {allDates.map(date => (
+                <option key={date} value={date}>{date}</option>
+              ))}
+            </TextField>
+            
             <IconButton 
               onClick={toggleDailySummary}
               sx={{ 
@@ -142,10 +175,10 @@ function App() {
               </Box>
             )}
             <Box sx={{ width: { xs: '100%', md: showDailySummary ? '30%' : '40%' }, minWidth: { xs: '100%', md: '300px' }, flexShrink: 0 }}>
-              <RankingTable ranking={data.ranking} searchPlayer={searchPlayer} />
+              <RankingTable ranking={data.ranking} searchPlayer={searchPlayer} selectedDate={selectedDate} />
             </Box>
             <Box sx={{ width: { xs: '100%', md: showDailySummary ? '50%' : '60%' }, minWidth: { xs: '100%', md: '500px' }, flexShrink: 0 }}>
-              <PlayerStats stats={data.player_stats} searchPlayer={searchPlayer} />
+              <PlayerStats stats={data.player_stats} searchPlayer={searchPlayer} selectedDate={selectedDate} />
             </Box>
           </Box>
         </Container>
