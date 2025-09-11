@@ -73,7 +73,7 @@ function PlayerStats({ stats, searchPlayer, selectedDate }) {
                 <TableCell sx={{ fontWeight: 'bold', py: 1, width: '20%', fontSize: '0.75rem' }}>Тоглогч</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', py: 1, width: '10%', textAlign: 'center', fontSize: '0.75rem' }}>Алуур</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', py: 1, width: '10%', textAlign: 'center', fontSize: '0.75rem' }}>Үхэл</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', py: 1, width: '20%', fontSize: '0.75rem' }}>Дайсан</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', py: 1, width: '20%', fontSize: '0.75rem' }}>Өстөн дайсан</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', py: 1, width: '25%', fontSize: '0.75rem' }}>Хохирогч</TableCell>
               </TableRow>
             </TableHead>
