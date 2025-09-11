@@ -16,6 +16,7 @@ import { Brightness4, Brightness7, SportsEsports, Search, CalendarToday } from '
 import DailySummary from './components/DailySummary';
 import RankingTable from './components/RankingTable';
 import PlayerStats from './components/PlayerStats';
+import VisitorCounter from "./visitorCounter";
 
 // Create a theme context
 export const ThemeContext = createContext();
@@ -110,6 +111,7 @@ function App() {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Тулах уу?
             </Typography>
+            <VisitorCounter />
             <IconButton color="inherit" onClick={toggleDarkMode}>
               {darkMode ? <Brightness7 /> : <Brightness4 />}
             </IconButton>
