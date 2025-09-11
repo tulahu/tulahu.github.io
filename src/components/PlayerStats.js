@@ -12,7 +12,8 @@ import {
   TextField,
   Box,
   Chip,
-  IconButton
+  IconButton,
+  Tooltip
 } from '@mui/material';
 import { Person, FirstPage, LastPage, NavigateBefore, NavigateNext } from '@mui/icons-material';
 import { ThemeContext } from '../App';
@@ -112,8 +113,17 @@ function PlayerStats({ stats, searchPlayer }) {
                 currentItems.map((entry, i) => (
                   <TableRow key={i} hover>
                     <TableCell sx={{ py: 1, fontSize: '0.75rem' }}>{entry.date}</TableCell>
-                    <TableCell sx={{ py: 1, fontSize: '0.75rem', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      {entry.player}
+                    <TableCell sx={{ py: 1, fontSize: '0.75rem', overflow: 'hidden' }}>
+                      <Tooltip title={entry.player} placement="top-start">
+                        <Box sx={{ 
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          width: '100%'
+                        }}>
+                          {entry.player}
+                        </Box>
+                      </Tooltip>
                     </TableCell>
                     <TableCell sx={{ py: 1, textAlign: 'center' }}>
                       <Chip label={entry.kills} color="error" size="small" sx={{ fontSize: '0.7rem' }} />
@@ -121,11 +131,29 @@ function PlayerStats({ stats, searchPlayer }) {
                     <TableCell sx={{ py: 1, textAlign: 'center' }}>
                       <Chip label={entry.deaths} color="default" size="small" variant="outlined" sx={{ fontSize: '0.7rem' }} />
                     </TableCell>
-                    <TableCell sx={{ py: 1, fontSize: '0.75rem', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      {entry.nemesis}
+                    <TableCell sx={{ py: 1, fontSize: '0.75rem', overflow: 'hidden' }}>
+                      <Tooltip title={entry.nemesis} placement="top-start">
+                        <Box sx={{ 
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          width: '100%'
+                        }}>
+                          {entry.nemesis}
+                        </Box>
+                      </Tooltip>
                     </TableCell>
-                    <TableCell sx={{ py: 1, fontSize: '0.75rem', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      {entry.victim}
+                    <TableCell sx={{ py: 1, fontSize: '0.75rem', overflow: 'hidden' }}>
+                      <Tooltip title={entry.victim} placement="top-start">
+                        <Box sx={{ 
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          width: '100%'
+                        }}>
+                          {entry.victim}
+                        </Box>
+                      </Tooltip>
                     </TableCell>
                   </TableRow>
                 ))

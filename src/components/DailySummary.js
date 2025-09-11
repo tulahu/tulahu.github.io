@@ -11,7 +11,8 @@ import {
   TableRow,
   Box,
   Chip,
-  IconButton
+  IconButton,
+  Tooltip
 } from '@mui/material';
 import { CalendarToday, FirstPage, LastPage, NavigateBefore, NavigateNext } from '@mui/icons-material';
 import { ThemeContext } from '../App';
@@ -64,13 +65,15 @@ function DailySummary({ summary }) {
                 <TableRow key={i} hover>
                   <TableCell sx={{ py: 1, fontSize: '0.75rem' }}>{day.date}</TableCell>
                   <TableCell sx={{ py: 1 }}>
-                    <Chip 
-                      label={day.winner} 
-                      color="primary" 
-                      variant="outlined"
-                      size="small"
-                      sx={{ fontSize: '0.7rem', maxWidth: '100%' }}
-                    />
+                    <Tooltip title={day.winner} placement="top-start">
+                      <Chip 
+                        label={day.winner} 
+                        color="primary" 
+                        variant="outlined"
+                        size="small"
+                        sx={{ fontSize: '0.7rem', maxWidth: '100%' }}
+                      />
+                    </Tooltip>
                   </TableCell>
                 </TableRow>
               ))}

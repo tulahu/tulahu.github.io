@@ -12,7 +12,7 @@ import {
   InputAdornment,
   CircularProgress
 } from '@mui/material';
-import { Brightness4, Brightness7, SportsEsports, Search } from '@mui/icons-material';
+import { Brightness4, Brightness7, SportsEsports, Search, CalendarToday } from '@mui/icons-material';
 import DailySummary from './components/DailySummary';
 import RankingTable from './components/RankingTable';
 import PlayerStats from './components/PlayerStats';
@@ -25,6 +25,7 @@ function App() {
   const [darkMode, setDarkMode] = useState(prefersDarkMode);
   const [data, setData] = useState(null);
   const [searchPlayer, setSearchPlayer] = useState('');
+  const [showDailySummary, setShowDailySummary] = useState(true);
 
   useEffect(() => {
     fetch(`${process.env.PUBLIC_URL}/daily_stats.json`)
@@ -32,6 +33,15 @@ function App() {
       .then(setData)
       .catch(err => console.error('Fetch error:', err));
   }, []);
+
+  // Auto-hide DailySummary when search text is present
+  useEffect(() => {
+    if (searchPlayer.trim() !== '') {
+      setShowDailySummary(false);
+    } else {
+      setShowDailySummary(true);
+    }
+  }, [searchPlayer]);
 
   const theme = createTheme({
     palette: {
@@ -54,6 +64,10 @@ function App() {
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
+  };
+
+  const toggleDailySummary = () => {
+    setShowDailySummary(!showDailySummary);
   };
 
   if (!data) {
@@ -88,7 +102,7 @@ function App() {
           </Toolbar>
         </AppBar>
         <Container maxWidth="xl" sx={{ py: 2 }}>
-          <Box sx={{ mb: 2 }}>
+          <Box sx={{ mb: 2, display: 'flex', gap: 1, alignItems: 'center' }}>
             <TextField
               fullWidth
               placeholder="Тоглогчийн нэрээр хайх..."
@@ -103,16 +117,34 @@ function App() {
               }}
               size="small"
             />
+            <IconButton 
+              onClick={toggleDailySummary}
+              sx={{ 
+                display: { xs: 'none', md: 'flex' },
+                color: showDailySummary ? 'primary.main' : 'text.secondary'
+              }}
+              title={showDailySummary ? 'Өдрийн хураангуйг хаах' : 'Өдрийн хураангуйг нээх'}
+            >
+              <CalendarToday />
+            </IconButton>
           </Box>
           
-          <Box sx={{ display: 'flex', gap: 2, flexWrap: 'nowrap', overflowX: 'auto' }}>
-            <Box sx={{ width: '20%', minWidth: '200px', flexShrink: 0 }}>
-              <DailySummary summary={data.daily_summary} />
-            </Box>
-            <Box sx={{ width: '30%', minWidth: '300px', flexShrink: 0 }}>
+          <Box sx={{ 
+            display: 'flex', 
+            flexDirection: { xs: 'column', md: 'row' }, 
+            gap: 2, 
+            flexWrap: 'nowrap', 
+            overflowX: 'auto' 
+          }}>
+            {showDailySummary && (
+              <Box sx={{ width: { xs: '100%', md: '20%' }, minWidth: { xs: '100%', md: '200px' }, flexShrink: 0 }}>
+                <DailySummary summary={data.daily_summary} />
+              </Box>
+            )}
+            <Box sx={{ width: { xs: '100%', md: showDailySummary ? '30%' : '40%' }, minWidth: { xs: '100%', md: '300px' }, flexShrink: 0 }}>
               <RankingTable ranking={data.ranking} searchPlayer={searchPlayer} />
             </Box>
-            <Box sx={{ width: '50%', minWidth: '500px', flexShrink: 0 }}>
+            <Box sx={{ width: { xs: '100%', md: showDailySummary ? '50%' : '60%' }, minWidth: { xs: '100%', md: '500px' }, flexShrink: 0 }}>
               <PlayerStats stats={data.player_stats} searchPlayer={searchPlayer} />
             </Box>
           </Box>
