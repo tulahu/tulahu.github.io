@@ -60,11 +60,16 @@ function App() {
     palette: {
       mode: darkMode ? 'dark' : 'light',
       primary: {
-        main: '#3f51b5',
+        main: '#d32f2f', // Fight red
       },
       secondary: {
-        main: '#f50057',
+        main: '#1976d2', // Steel blue
       },
+      customRank: {
+        gold: '#D4AF37',
+        silver: '#C0C0C0',
+        bronze: '#CD7F32'
+      }
     },
     typography: {
       fontFamily: [

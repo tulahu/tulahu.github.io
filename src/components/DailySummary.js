@@ -43,6 +43,14 @@ function DailySummary({ summary }) {
     setPage(totalPages - 1);
   };
 
+  const noSelectStyle = {
+    userSelect: 'none',
+    WebkitUserSelect: 'none',
+    MozUserSelect: 'none',
+    msUserSelect: 'none',
+    WebkitTapHighlightColor: 'transparent'
+  };
+
   return (
     <Card elevation={3} sx={{ height: '100%' }}>
       <CardContent>
@@ -56,15 +64,15 @@ function DailySummary({ summary }) {
           <Table size="small" sx={{ tableLayout: 'fixed' }}>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ fontWeight: 'bold', py: 1, width: '40%', fontSize: '0.75rem' }}>Огноо</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', py: 1, width: '60%', fontSize: '0.75rem' }}>Ялагч</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', py: 1, width: '40%', fontSize: '0.75rem', ...noSelectStyle }}>Огноо</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', py: 1, width: '60%', fontSize: '0.75rem', ...noSelectStyle }}>Ялагч</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {currentItems.map((day, i) => (
                 <TableRow key={i} hover>
-                  <TableCell sx={{ py: 1, fontSize: '0.75rem' }}>{day.date}</TableCell>
-                  <TableCell sx={{ py: 1 }}>
+                  <TableCell sx={{ py: 1, fontSize: '0.75rem', ...noSelectStyle }}>{day.date}</TableCell>
+                  <TableCell sx={{ py: 1, ...noSelectStyle }}>
                     <Tooltip title={day.winner} placement="top-start">
                       <Chip 
                         label={day.winner} 

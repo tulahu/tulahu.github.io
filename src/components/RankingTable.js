@@ -14,61 +14,63 @@ import {
   IconButton,
   Tooltip
 } from '@mui/material';
-import { EmojiEvents, FirstPage, LastPage, NavigateBefore, NavigateNext } from '@mui/icons-material';
+import {
+  EmojiEvents,
+  FirstPage,
+  LastPage,
+  NavigateBefore,
+  NavigateNext
+} from '@mui/icons-material';
 import { ThemeContext } from '../App';
+import { keyframes } from '@emotion/react';
 
-// Helper to convert time string to seconds
+// 🥇 Medal glow animations
+const goldGlow = keyframes`
+  0%, 100% { box-shadow: 0 0 0px #D4AF37; }
+  50% { box-shadow: 0 0 12px #D4AF37; }
+`;
+
+const silverGlow = keyframes`
+  0%, 100% { box-shadow: 0 0 0px #C0C0C0; }
+  50% { box-shadow: 0 0 12px #C0C0C0; }
+`;
+
+const bronzeGlow = keyframes`
+  0%, 100% { box-shadow: 0 0 0px #CD7F32; }
+  50% { box-shadow: 0 0 12px #CD7F32; }
+`;
+
+// Time helpers
 const timeToSeconds = (timeValue) => {
   if (!timeValue) return 0;
-  
-  // If it's already a number, return it directly
-  if (typeof timeValue === 'number') {
-    return timeValue;
-  }
-  
-  // If it's a string with colons (HH:MM:SS format)
+  if (typeof timeValue === 'number') return timeValue;
   if (timeValue.includes(':')) {
     const parts = timeValue.split(':').map(Number);
-    if (parts.length === 3) {
-      return parts[0] * 3600 + parts[1] * 60 + parts[2];
-    } else if (parts.length === 2) {
-      return parts[0] * 60 + parts[1];
-    }
+    if (parts.length === 3) return parts[0] * 3600 + parts[1] * 60 + parts[2];
+    if (parts.length === 2) return parts[0] * 60 + parts[1];
   }
-  
-  // If it's a string with dots (seconds.centiseconds format)
-  if (timeValue.includes('.')) {
-    return parseFloat(timeValue);
-  }
-  
-  // If it's just a number as string
+  if (timeValue.includes('.')) return parseFloat(timeValue);
   return Number(timeValue);
 };
 
-// Helper to convert seconds back to MM:SS format (for shorter times)
 const formatTime = (seconds) => {
-  if (seconds < 60) {
-    return `${seconds.toFixed(2)}s`; // Show decimal seconds for short times
-  }
-  
+  if (seconds < 60) return `${seconds.toFixed(2)}s`;
   const mins = Math.floor(seconds / 60);
   const secs = (seconds % 60).toFixed(2);
-  return `${mins}:${secs.padStart(5, '0')}`; // Format as M:SS.ss
+  return `${mins}:${secs.padStart(5, '0')}`;
 };
 
 function RankingTable({ ranking, searchPlayer, selectedDate }) {
   const { darkMode } = useContext(ThemeContext);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage] = useState(10);
 
-  // Filter by player name and date
   const filteredRanking = ranking
     .filter(entry => {
       const matchesPlayer = entry.player.toLowerCase().includes(searchPlayer.toLowerCase());
       const matchesDate = selectedDate === 'All Time' || entry.date === selectedDate;
       return matchesPlayer && matchesDate;
     })
-    // Sort by date (newest first) and then by rank (lowest first)
     .sort((a, b) => {
       const dateCompare = new Date(b.date) - new Date(a.date);
       if (dateCompare !== 0) return dateCompare;
@@ -78,20 +80,17 @@ function RankingTable({ ranking, searchPlayer, selectedDate }) {
   const totalPages = Math.ceil(filteredRanking.length / rowsPerPage);
   const currentItems = filteredRanking.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
-  const handleFirstPage = () => {
-    setPage(0);
-  };
+  const handleFirstPage = () => setPage(0);
+  const handlePreviousPage = () => setPage(prev => Math.max(prev - 1, 0));
+  const handleNextPage = () => setPage(prev => Math.min(prev + 1, totalPages - 1));
+  const handleLastPage = () => setPage(totalPages - 1);
 
-  const handlePreviousPage = () => {
-    setPage(prev => Math.max(prev - 1, 0));
-  };
-
-  const handleNextPage = () => {
-    setPage(prev => Math.min(prev + 1, totalPages - 1));
-  };
-
-  const handleLastPage = () => {
-    setPage(totalPages - 1);
+  const noSelectStyle = {
+    userSelect: 'none',
+    WebkitUserSelect: 'none',
+    MozUserSelect: 'none',
+    msUserSelect: 'none',
+    WebkitTapHighlightColor: 'transparent'
   };
 
   return (
@@ -108,51 +107,68 @@ function RankingTable({ ranking, searchPlayer, selectedDate }) {
           <Table size="small" sx={{ tableLayout: 'fixed' }}>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ fontWeight: 'bold', py: 1, width: '25%', fontSize: '0.75rem' }}>Огноо</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', py: 1, width: '35%', fontSize: '0.75rem' }}>Тоглогч</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', py: 1, width: '20%', textAlign: 'center', fontSize: '0.75rem' }}>Зэрэглэл</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', py: 1, width: '20%', fontSize: '0.75rem' }}>Хугацаа</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', py: 1, width: '25%', fontSize: '0.75rem', ...noSelectStyle }}>Огноо</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', py: 1, width: '35%', fontSize: '0.75rem', ...noSelectStyle }}>Тоглогч</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', py: 1, width: '20%', textAlign: 'center', fontSize: '0.75rem', ...noSelectStyle }}>Зэрэглэл</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', py: 1, width: '20%', fontSize: '0.75rem', ...noSelectStyle }}>Хугацаа</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {currentItems.map((entry, i) => (
-                <TableRow key={i} hover>
-                  <TableCell sx={{ py: 1, fontSize: '0.75rem' }}>{entry.date}</TableCell>
-                  <TableCell sx={{ py: 1, fontSize: '0.75rem', overflow: 'hidden' }}>
-                    <Tooltip title={entry.player} placement="top-start">
-                      <Box sx={{ 
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap',
-                        width: '100%'
-                      }}>
-                        {entry.player}
-                      </Box>
-                    </Tooltip>
-                  </TableCell>
-                  <TableCell sx={{ py: 1, textAlign: 'center' }}>
-                    <Chip 
-                      label={entry.rank === 0 ? 1 : entry.rank} 
-                      color={
-                        entry.rank === 0 ? 'primary' : 
-                        entry.rank <= 3 ? 'secondary' : 'default'
-                      } 
-                      variant={entry.rank <= 3 ? 'filled' : 'outlined'}
-                      size="small"
-                      sx={{ fontSize: '0.7rem' }}
-                    />
-                  </TableCell>
-                  <TableCell sx={{ py: 1, fontSize: '0.75rem' }}>
-                    {entry.time === null
-                      ? <Chip icon={<EmojiEvents />} color="success" size="small" sx={{ fontSize: '0.7rem' }} />
-                      : formatTime(timeToSeconds(entry.time))}
-                  </TableCell>
-                </TableRow>
-              ))}
+              {currentItems.map((entry, i) => {
+                const rank = entry.rank === 0 ? 1 : entry.rank;
+                let glowAnimation = 'none';
+                let chipColor = 'default';
+                let chipStyle = {};
+
+                if (rank === 1) {
+                  glowAnimation = goldGlow;
+                  chipStyle = { backgroundColor: '#D4AF37', color: 'black' };
+                } else if (rank === 2) {
+                  glowAnimation = silverGlow;
+                  chipStyle = { backgroundColor: '#C0C0C0', color: 'black' };
+                } else if (rank === 3) {
+                  glowAnimation = bronzeGlow;
+                  chipStyle = { backgroundColor: '#CD7F32', color: 'white' };
+                }
+
+                return (
+                  <TableRow key={i} hover>
+                    <TableCell sx={{ py: 1, fontSize: '0.75rem', ...noSelectStyle }}>{entry.date}</TableCell>
+                    <TableCell sx={{ py: 1, fontSize: '0.75rem', overflow: 'hidden', ...noSelectStyle }}>
+                      <Tooltip title={entry.player} placement="top-start">
+                        <Box sx={{
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          width: '100%'
+                        }}>
+                          {entry.player}
+                        </Box>
+                      </Tooltip>
+                    </TableCell>
+                    <TableCell sx={{ py: 1, textAlign: 'center', ...noSelectStyle }}>
+                      <Chip
+                        label={rank}
+                        size="small"
+                        sx={{
+                          fontSize: '0.7rem',
+                          animation: rank <= 3 ? `${glowAnimation} 2s infinite` : 'none',
+                          ...chipStyle
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell sx={{ py: 1, fontSize: '0.75rem', ...noSelectStyle }}>
+                      {entry.time === null
+                        ? <Chip icon={<EmojiEvents />} color="success" size="small" sx={{ fontSize: '0.7rem' }} />
+                        : formatTime(timeToSeconds(entry.time))}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>
-        
+
         <Box display="flex" justifyContent="space-between" alignItems="center" mt={2}>
           <Box>
             <IconButton onClick={handleFirstPage} disabled={page === 0} size="small">
