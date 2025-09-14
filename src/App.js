@@ -1,3 +1,4 @@
+import './App.css';
 import React, { useState, useEffect, createContext } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -106,12 +107,38 @@ function App() {
 
   const allDates = getAllDates();
 
+  const renderLeaves = () => {
+    return [...Array(40)].map((_, i) => {
+      const left = Math.random() * 100;
+      const fallDuration = 8 + Math.random() * 8; // 8–16s
+      const delay = Math.random() * 5;
+      const size = 20 + Math.random() * 20;
+
+      return (
+        <div
+          key={i}
+          className="leaf"
+          style={{
+            left: `${left}%`,
+            width: `${size}px`,
+            height: `${size}px`,
+            backgroundImage: `url(${process.env.PUBLIC_URL}/leaves/leaf${(i % 3) + 1}.png)`,
+            animation: `fallAndSwing ${fallDuration}s linear ${delay}s infinite`
+          }}
+        />
+      );
+    });
+  };
+
   return (
     <ThemeContext.Provider value={{ darkMode, toggleDarkMode }}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <AppBar position="static" elevation={2}>
-          <Toolbar>
+          <Toolbar sx={{ position: 'relative', overflow: 'hidden', minHeight: '64px' }}>
+            <div className="leaf-container">
+              {renderLeaves()}
+            </div>
             <SportsEsports sx={{ mr: 2 }} />
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Тулах уу?
