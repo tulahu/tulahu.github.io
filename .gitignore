@@ -29,3 +29,7 @@ coverage/
 
 # Mac system files
 *.DS_Store
+
+# Data files
+src/data/
+*.json

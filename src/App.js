@@ -32,6 +32,7 @@ import PlayerStats from './components/PlayerStats';
 import HoverTranslation from './utils/HoverTranslation';
 import VisitorCounter from "./visitorCounter";
 import { convertToTraditionalMongolian } from './utils/dateConversion';
+import dailyStats from './data/daily_stats.json';
 
 // Create a theme context
 export const ThemeContext = createContext();
@@ -61,10 +62,7 @@ function App() {
   };
 
   useEffect(() => {
-    fetch(`${process.env.PUBLIC_URL}/daily_stats.json`)
-      .then(res => res.json())
-      .then(setData)
-      .catch(err => console.error('Fetch error:', err));
+    setData(dailyStats);
   }, []);
 
   useEffect(() => {

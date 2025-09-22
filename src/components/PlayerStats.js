@@ -1,4 +1,5 @@
-import React, { useState, useContext } from 'react';
+// src/components/PlayerStats.js
+import React, { useState, useContext, useEffect, useMemo } from 'react';
 import {
   Card,
   CardContent,
@@ -12,7 +13,9 @@ import {
   Box,
   IconButton,
   Tooltip,
-  useMediaQuery
+  useMediaQuery,
+  ToggleButton,
+  ToggleButtonGroup
 } from '@mui/material';
 import {
   Person,
@@ -27,6 +30,7 @@ import { useSwipeable } from 'react-swipeable';
 import { keyframes } from '@emotion/react';
 import { convertToTraditionalMongolian } from '../utils/dateConversion';
 import HoverTranslation from '../utils/HoverTranslation';
+import mutualFollowings from '../data/mutual_followings.json';
 
 // 🔥 Glow animations
 const redGlow = keyframes`
@@ -43,30 +47,113 @@ const getGoldGlow = (isDarkMode) => keyframes`
   }
 `;
 
-function PlayerStats({ stats, searchPlayer, selectedDate, language }) {
+function PlayerStats({ stats = [], searchPlayer = '', selectedDate = 'All Time', language = 'modern' }) {
   const theme = useTheme();
   const isDarkMode = theme.palette.mode === 'dark';
   const goldGlow = getGoldGlow(isDarkMode);
   const { darkMode } = useContext(ThemeContext);
   const [page, setPage] = useState(0);
+  const [filterMode, setFilterMode] = useState('general'); // 'general' | 'friends'
   const rowsPerPage = 10;
   const isMobile = useMediaQuery('(max-width:600px)');
 
-  const filteredStats = stats
-    .filter(entry => {
-      const matchesName = entry.player.toLowerCase().includes(searchPlayer.toLowerCase());
+  // --- Prepare mutual lookup (lowercased) ---
+  const mutualLookup = useMemo(() => {
+    const map = {};
+    Object.keys(mutualFollowings || {}).forEach(k => {
+      map[k.toLowerCase()] = (mutualFollowings[k] || []).map(u => u.toLowerCase());
+    });
+    return map;
+  }, []);
+
+  // normalize helper
+  const normalize = (s) => (s || '').toString().toLowerCase().trim();
+
+  // try to resolve a username key in mutualLookup from searchPlayer or stats
+  const resolveKey = (search) => {
+    const s = normalize(search);
+    if (!s) return null;
+
+    // exact
+    if (mutualLookup[s]) return s;
+
+    // direct substring matches (username contains typed text or vice versa)
+    for (const k of Object.keys(mutualLookup)) {
+      if (k === s || k.includes(s) || s.includes(k)) return k;
+    }
+
+    // try matching against stats.player (display name or username)
+    for (const entry of stats) {
+      const p = normalize(entry.player);
+      if (!p) continue;
+      if (p === s || p.includes(s) || s.includes(p)) {
+        // if the normalized display looks like an actual username key, return it
+        if (mutualLookup[p]) return p;
+        // else try to find a key that's included in p
+        for (const k of Object.keys(mutualLookup)) {
+          if (p.includes(k) || k.includes(p)) return k;
+        }
+      }
+    }
+
+    // normalized username (strip spaces/punct)
+    const compact = s.replace(/\s+/g, '').replace(/[^\w.]/g, '');
+    if (mutualLookup[compact]) return compact;
+
+    return null;
+  };
+
+  // Build the mutuals set used for filtering in "friends" mode
+  const mutualsSet = useMemo(() => {
+    if (filterMode !== 'friends') return new Set();
+
+    const s = normalize(searchPlayer);
+    if (!s) {
+      // no searchPlayer: union of all mutuals
+      const union = new Set();
+      Object.values(mutualLookup).forEach(arr => arr.forEach(u => union.add(u)));
+      return union;
+    }
+
+    const key = resolveKey(searchPlayer);
+    if (!key) return new Set(); // not found -> empty set
+    return new Set(mutualLookup[key] || []);
+  }, [filterMode, searchPlayer, mutualLookup, stats]);
+
+  // --- Filter and sort stats based on mode ---
+  const filteredStats = useMemo(() => {
+    const arr = (stats || []).filter(entry => {
+      const matchesName = (entry.player || '').toString().toLowerCase().includes((searchPlayer || '').toLowerCase());
       const matchesDate = selectedDate === 'All Time' || entry.date === selectedDate;
-      return matchesName && matchesDate;
-    })
-    .sort((a, b) => {
-      const dateCompare = new Date(b.date) - new Date(a.date);
-      if (dateCompare !== 0) return dateCompare;
-      return b.kills - a.kills;
+
+      if (!matchesName || !matchesDate) return false;
+
+      if (filterMode === 'general') return true;
+
+      // friends mode: check if either nemesis or victim are in the mutuals set
+      const nem = normalize(entry.nemesis);
+      const vic = normalize(entry.victim);
+
+      return mutualsSet.has(nem) || mutualsSet.has(vic);
     });
 
-  const totalPages = Math.ceil(filteredStats.length / rowsPerPage);
+    arr.sort((a, b) => {
+      const dateCompare = new Date(b.date) - new Date(a.date);
+      if (dateCompare !== 0) return dateCompare;
+      return (b.kills || 0) - (a.kills || 0);
+    });
+
+    return arr;
+  }, [stats, searchPlayer, selectedDate, filterMode, mutualsSet]);
+
+  // reset page when filters/search change
+  useEffect(() => {
+    setPage(0);
+  }, [searchPlayer, selectedDate, filterMode]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredStats.length / rowsPerPage));
   const currentItems = filteredStats.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-  const topKills = currentItems.reduce((max, entry) => Math.max(max, entry.kills), 0);
+  const topKills = currentItems.reduce((max, entry) => Math.max(max, entry.kills || 0), 0);
 
   const handleFirstPage = () => setPage(0);
   const handlePreviousPage = () => setPage(prev => Math.max(prev - 1, 0));
@@ -101,17 +188,36 @@ function PlayerStats({ stats, searchPlayer, selectedDate, language }) {
     victim: { traditional: 'ᠬᠣᠬᠢᠷᠣᠭᠴ', hover: 'Хохирогч' }
   };
 
+  const filterLabels = {
+    friends: {
+      traditional: 'ᠨᠠᠶᠢᠭᠤᠳᠠᠨ ᠰᠲᠠᠲᠢᠰᠲᠢᠺ',
+      modern: 'Найзуудын статистик'
+    },
+    general: {
+      traditional: 'ᠶᠡᠷᠦᠨᠢᠬᠡ ᠰᠲᠠᠲᠢᠰᠲᠢᠺ',
+      modern: 'Ерөнхий статистик'
+    }
+  };
+
   const pageText =
     language === 'traditional'
       ? `${convertToTraditionalMongolian(String(page + 1))} / ${convertToTraditionalMongolian(String(totalPages))}`
       : `${page + 1} / ${totalPages}`;
+
+  useEffect(() => {
+    if (searchPlayer.trim() === "") {
+      setFilterMode("general");
+    } else {
+      setFilterMode("friends");
+    }
+  }, [searchPlayer]);
 
   return (
     <Card elevation={3} sx={{ height: '100%' }} {...swipeHandlers}>
       <CardContent>
         {language === 'traditional' ? (
           <Box display="flex" flexDirection="row" alignItems="stretch" gap={2}>
-            {/* Left side: Icon + Vertical Title */}
+            {/* Left side: Icon + Vertical Title + Vertical Toggles */}
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="start">
               <Person color="primary" sx={{ mb: 1 }} />
               <HoverTranslation
@@ -120,6 +226,34 @@ function PlayerStats({ stats, searchPlayer, selectedDate, language }) {
                 language={language}
                 sx={{ fontSize: '1.2rem', fontWeight: 'bold' }}
               />
+            </Box>
+
+            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" gap={1} mt={2}>
+              {/* Vertical toggle buttons */}
+              <ToggleButtonGroup
+                orientation="vertical"
+                value={filterMode}
+                exclusive
+                onChange={(e, val) => val && setFilterMode(val)}
+                size="small"
+              >
+                <ToggleButton value="friends" sx={{ writingMode: 'vertical-rl', textOrientation: 'upright', px: 1, py: 2 }}>
+                  <HoverTranslation
+                    traditionalText={filterLabels.friends.traditional}
+                    cyrillicText={filterLabels.friends.modern}
+                    language={language}
+                    sx={{ fontSize: '1rem', fontWeight: 'bold' }}
+                  />
+                </ToggleButton>
+                <ToggleButton value="general" sx={{ writingMode: 'vertical-rl', textOrientation: 'upright', px: 1, py: 2 }}>
+                  <HoverTranslation
+                    traditionalText={filterLabels.general.traditional}
+                    cyrillicText={filterLabels.general.modern}
+                    language={language}
+                    sx={{ fontSize: '1rem', fontWeight: 'bold' }}
+                  />
+                </ToggleButton>
+              </ToggleButtonGroup>
             </Box>
 
             {/* Right side: Vertical Table */}
@@ -148,7 +282,7 @@ function PlayerStats({ stats, searchPlayer, selectedDate, language }) {
                                 sx={{ fontSize: '1rem' }}
                               />
                             );
-                          } else if (key === 'player' || key === 'nemesis' || key === 'victim') {
+                          } else if (['player', 'nemesis', 'victim'].includes(key)) {
                             content = (
                               <Tooltip title={entry[key]} placement="left">
                                 <Box sx={{
@@ -222,7 +356,18 @@ function PlayerStats({ stats, searchPlayer, selectedDate, language }) {
                 {labels.title.modern}
               </Typography>
             </Box>
-
+            {/* Toggle filter mode */}
+            <Box display="flex" justifyContent="center" mb={2}>
+              <ToggleButtonGroup
+                value={filterMode}
+                exclusive
+                onChange={(e, val) => val && setFilterMode(val)}
+                size="small"
+              >
+                <ToggleButton value="friends">Найзуудын статистик</ToggleButton>
+                <ToggleButton value="general">Ерөнхий статистик</ToggleButton>
+              </ToggleButtonGroup>
+            </Box>
             <TableContainer>
               <Table size="small" sx={{ tableLayout: 'fixed' }}>
                 <TableHead>
