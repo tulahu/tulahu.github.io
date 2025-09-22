@@ -156,6 +156,26 @@ function App() {
     });
   };
 
+  const renderRain = () => {
+    return [...Array(100)].map((_, i) => {
+      const left = Math.random() * 100; // % position
+      const delay = Math.random() * 5; // stagger
+      const duration = 1 + Math.random() * 1.5; // fall speed
+
+      return (
+        <div
+          key={`drop-${i}`}
+          className="drop"
+          style={{
+            left: `${left}%`,
+            animationDuration: `${duration}s`,
+            animationDelay: `${delay}s`,
+          }}
+        />
+      );
+    });
+  };
+
   const handleOpenDateMenu = (event) => {
     setDateMenuAnchor(event.currentTarget);
   };
@@ -205,7 +225,7 @@ function App() {
                 }}
               >
                 <Box
-                  className="leaf-container"
+                  className="rain-container"
                   sx={{
                     position: 'absolute',
                     top: 0,
@@ -217,7 +237,7 @@ function App() {
                     zIndex: 0,
                   }}
                 >
-                  {renderLeaves()}
+                  {renderRain()}
                 </Box>
                 <SportsEsports />
                 <HoverTranslation
@@ -482,7 +502,7 @@ function App() {
             <AppBar position="static" elevation={2}>           
               <Toolbar>
                 <Box
-                  className="leaf-container"
+                  className="rain-container"
                   sx={{
                     position: 'absolute',
                     top: 0,
@@ -494,7 +514,7 @@ function App() {
                     zIndex: 0,
                   }}
                 >
-                  {renderLeaves()}
+                  {renderRain()}
                 </Box>
                 <SportsEsports sx={{ mr: 2 }} />
                 <HoverTranslation
