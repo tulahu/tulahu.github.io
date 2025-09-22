@@ -194,7 +194,7 @@ function PlayerStats({ stats = [], searchPlayer = '', selectedDate = 'All Time',
       modern: 'Найзуудын статистик'
     },
     general: {
-      traditional: 'ᠶᠡᠷᠦᠨᠢᠬᠡ ᠰᠲᠠᠲᠢᠰᠲᠢᠺ',
+      traditional: 'ᠧᠷᠥᠨᠬᠢᠶ ᠰᠲᠠᠲᠢᠰᠲᠢᠺ',
       modern: 'Ерөнхий статистик'
     }
   };
