@@ -72,3 +72,20 @@
         transform: translateY(100vh);
     }
 }
+
+.snow {
+    position: absolute;
+    top: -10px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+    opacity: 0.9;
+    animation: snowFall linear infinite;
+}
+
+@keyframes snowFall {
+    to {
+        transform: translateY(100vh);
+    }
+}

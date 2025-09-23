@@ -46,6 +46,7 @@ function App() {
   const [selectedDate, setSelectedDate] = useState('All Time');
   const [showDailySummary, setShowDailySummary] = useState(true);
   const [language, setLanguage] = useState('modern');
+  const [weather, setWeather] = useState(null);
   const handleLanguageChange = (_, newLang) => {
     if (newLang !== null) setLanguage(newLang);
   };
@@ -78,6 +79,26 @@ function App() {
       alert("Зөвлөмж: Монгол бичиг хувилбар нь утас хэвтээ байхад илүү сайн харагдана. Ер нь компьютер дээр хамаагүй дээр дээ.");
     }
   }, [language]);
+
+  const apiKey = process.env.REACT_APP_WEATHER_API_KEY;
+
+  useEffect(() => {
+    const fetchWeather = async () => {
+      try {
+        const res = await fetch(
+          `https://api.openweathermap.org/data/2.5/weather?q=Ulaanbaatar&appid=${apiKey}&units=metric`
+        );
+        const data = await res.json();
+        setWeather(data.weather[0].main); // e.g. "Rain", "Snow", "Clear", "Clouds"
+      } catch (err) {
+        console.error("Weather fetch failed", err);
+      }
+    };
+
+    fetchWeather();
+    const interval = setInterval(fetchWeather, 10 * 60 * 1000); // refresh every 10 mins
+    return () => clearInterval(interval);
+  }, []);
 
   const getAllDates = () => {
     if (!data) return [];
@@ -176,6 +197,27 @@ function App() {
     });
   };
 
+  const renderSnow = () => {
+    return [...Array(30)].map((_, i) => {
+      const left = Math.random() * 100;
+      const delay = Math.random() * 10;
+      const duration = 10 + Math.random() * 10;
+
+      return (
+        <div
+          key={`snow-${i}`}
+          className="snow"
+          style={{
+            left: `${left}%`,
+            animationDuration: `${duration}s`,
+            animationDelay: `${delay}s`,
+          }}
+        />
+      );
+    });
+  };
+
+
   const handleOpenDateMenu = (event) => {
     setDateMenuAnchor(event.currentTarget);
   };
@@ -225,7 +267,11 @@ function App() {
                 }}
               >
                 <Box
-                  className="rain-container"
+                  className={
+                    weather === "Rain" ? "rain-container" :
+                    weather === "Snow" ? "snow-container" :
+                    "leaf-container"
+                  }
                   sx={{
                     position: 'absolute',
                     top: 0,
@@ -237,7 +283,9 @@ function App() {
                     zIndex: 0,
                   }}
                 >
-                  {renderRain()}
+                  {weather === "Rain" && renderRain()}
+                  {weather === "Snow" && renderSnow()}
+                  {(weather === "Clear" || weather === "Clouds") && renderLeaves()}
                 </Box>
                 <SportsEsports />
                 <HoverTranslation
@@ -502,7 +550,11 @@ function App() {
             <AppBar position="static" elevation={2}>           
               <Toolbar>
                 <Box
-                  className="rain-container"
+                  className={
+                    weather === "Rain" ? "rain-container" :
+                    weather === "Snow" ? "snow-container" :
+                    "leaf-container"
+                  }
                   sx={{
                     position: 'absolute',
                     top: 0,
@@ -514,7 +566,9 @@ function App() {
                     zIndex: 0,
                   }}
                 >
-                  {renderRain()}
+                  {weather === "Rain" && renderRain()}
+                  {weather === "Snow" && renderSnow()}
+                  {(weather === "Clear" || weather === "Clouds") && renderLeaves()}
                 </Box>
                 <SportsEsports sx={{ mr: 2 }} />
                 <HoverTranslation
