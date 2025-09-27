@@ -41,15 +41,15 @@ function DailySummary({ summary, language }) {
   const labels = {
     title: {
       modern: 'Өдөр тутмын хураангуй',
-      traditional: 'ᠥᠳᠥᠷ ᠲᠦᠲᠦᠮᠢᠨ ᠬᠤᠷᠠᠠᠨᠭᠤᠶ',
+      traditional: 'ᠡᠳᠦᠷ ᠲᠤᠲᠤᠮ ᠤ᠋ᠨ ᠬᠤᠷᠢᠶᠠᠩᠭᠤᠢ',
       hover: 'Өдөр тутмын хураангуй'
     },
     date: {
-      traditional: 'ᠣᠭᠨᠣᠣ',
+      traditional: 'ᠣᠩᠨᠠᠭ᠎ᠠ',
       hover: 'Огноо'
     },
     winner: {
-      traditional: 'ᠶᠠᠯᠠᠭᠴᠢ',
+      traditional: 'ᠢᠯᠠᠭᠴᠢ',
       hover: 'Ялагч'
     }
   };

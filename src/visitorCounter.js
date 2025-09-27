@@ -32,10 +32,10 @@ export default function VisitorCounter({ language }) {
     updateVisitorCount();
   }, []);
 
-  const labelTraditional = 'ᠨᠢᠶᠲ ᠽᠣᠴᠢᠯᠰᠣᠨ᠄';
+  const labelTraditional = 'ᠨᠡᠶᠢᠲᠡ ᠵᠣᠴᠢᠯᠠᠭᠰᠠᠨ᠄';
   const labelCyrillic = 'Нийт зочилсон:';
 
-  const loadingTraditional = 'ᠱᠢᠨᠡᠴᠢᠯᠵ ᠪᠠᠶᠨᠠ...';
+  const loadingTraditional = 'ᠰᠢᠨᠡᠴᠢᠯᠡᠵᠦ ᠪᠠᠶᠢᠨ᠎ᠠ...';
   const loadingCyrillic = 'Шинэчилж байна...';
 
   const displayCount =

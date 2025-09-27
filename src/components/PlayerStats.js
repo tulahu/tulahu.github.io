@@ -177,24 +177,24 @@ function PlayerStats({ stats = [], searchPlayer = '', selectedDate = 'All Time',
 
   const labels = {
     title: {
-      traditional: 'ᠲᠣᠭᠯᠣᠭᠴᠢᠶᠨ ᠰᠲᠠᠲᠢᠰᠲᠢᠺ',
+      traditional: 'ᠲᠣᠭᠯᠠᠭᠴᠢ ᠶ᠋ᠢᠨ ᠰᠲ᠋ᠠᠲ᠋ᠢᠰᠲ᠋ᠢᠭ',
       hover: 'Тоглогчийн статистик',
       modern: 'Тоглогчийн статистик'
     },
-    date: { traditional: 'ᠣᠭᠨᠣᠣ', hover: 'Огноо' },
-    player: { traditional: 'ᠲᠣᠭᠯᠣᠭᠴ', hover: 'Тоглогч' },
-    kills: { traditional: 'ᠠᠯᠤᠤᠷ', hover: 'Алуур' },
-    nemesis: { traditional: 'ᠥᠰᠲᠥᠨ ᠳᠠᠶᠰᠠᠨ', hover: 'Өстөн дайсан' },
-    victim: { traditional: 'ᠬᠣᠬᠢᠷᠣᠭᠴ', hover: 'Хохирогч' }
+    date: { traditional: 'ᠣᠩᠨᠠᠭ᠎ᠠ', hover: 'Огноо' },
+    player: { traditional: 'ᠲᠣᠭᠯᠠᠭᠴᠢ', hover: 'Тоглогч' },
+    kills: { traditional: 'ᠠᠯᠤᠷ', hover: 'Алуур' },
+    nemesis: { traditional: 'ᠥᠰᠲᠡᠨ ᠳᠠᠶᠢᠰᠤᠨ', hover: 'Өстөн дайсан' },
+    victim: { traditional: 'ᠬᠣᢈᠢᠷᠠᠭᠴᠢ', hover: 'Хохирогч' }
   };
 
   const filterLabels = {
     friends: {
-      traditional: 'ᠨᠠᠶᠢᠭᠤᠳᠠᠨ ᠰᠲᠠᠲᠢᠰᠲᠢᠺ',
+      traditional: 'ᠨᠠᠶᠢᠵᠠ ᠨᠠᠷ ᠤ᠋ᠨ ᠰᠲ᠋ᠠᠲ᠋ᠢᠰᠲ᠋ᠢᠭ',
       modern: 'Найзуудын статистик'
     },
     general: {
-      traditional: 'ᠧᠷᠥᠨᠬᠢᠶ ᠰᠲᠠᠲᠢᠰᠲᠢᠺ',
+      traditional: 'ᠶᠡᠷᠦᠩᢈᠡᠢ ᠰᠲ᠋ᠠᠲ᠋ᠢᠰᠲ᠋ᠢᠭ',
       modern: 'Ерөнхий статистик'
     }
   };

@@ -54,11 +54,11 @@ function App() {
   const labels = {
     searchPlaceholder: {
       modern: 'Тоглогчийн нэрээр хайх...',
-      traditional: 'ᠲᠣᠭᠯᠣᠭᠴᠢᠶᠨ ᠨᠡᠷᠡᠡᠷ ᠬᠠᠶᠬ'
+      traditional: 'ᠲᠣᠭᠯᠠᠭᠴᠢ ᠶ᠋ᠢᠨ ᠨᠡᠷ᠎ᠡ ᠪᠡᠷ ᠬᠠᠶᠢᠬᠤ'
     },
     allTime: {
       modern: 'Бүх цаг үе',
-      traditional: 'ᠪᠦᠬ ᠼᠠᠭ ᠦᠧ'
+      traditional: 'ᠪᠦᠬᠦ ᠴᠠᠭ ᠦᠶ᠎ᠡ ᠨᠠᠮᠤᠷ ᠤ᠋ᠨ'
     }
   };
 
@@ -289,7 +289,7 @@ function App() {
                 </Box>
                 <SportsEsports />
                 <HoverTranslation
-                  traditionalText="ᠲᠤᠯᠠᠬ ᠤᠤ ?"
+                  traditionalText="ᠲᠤᠯᠬᠤ ᠤᠤ ?"
                   cyrillicText="Тулах уу?"
                   language={language}
                   variant="h6"

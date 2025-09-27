@@ -85,14 +85,14 @@ function RankingTable({ ranking, searchPlayer, selectedDate, language }) {
 
   const labels = {
     title: {
-      traditional: 'ᠲᠣᠭᠯᠤᠭᠴᠢᠨ ᠽᠡᠷᠡᠭᠯᠡᠯ',
+      traditional: 'ᠲᠣᠭᠯᠠᠭᠴᠢᠳ ᠤ᠋ᠨ ᠵᠡᠷᢉᠡᠯᠡᠯ',
       hover: 'Тоглогчдын зэрэглэл',
       modern: 'Тоглогчдын зэрэглэл'
     },
-    date: { traditional: 'ᠣᠭᠨᠣᠭ', hover: 'Огноо', modern: 'Огноо' },
-    player: { traditional: 'ᠲᠣᠭᠯᠤᠭᠴᠢ', hover: 'Тоглогч', modern: 'Тоглогч' },
-    rank: { traditional: 'ᠽᠡᠷᠡᠭᠯᠡᠯ', hover: 'Зэрэглэл', modern: 'Зэрэглэл' },
-    time: { traditional: 'ᠬᠤᠭ᠎ᠠᠵᠢ', hover: 'Хугацаа', modern: 'Хугацаа' }
+    date: { traditional: 'ᠣᠩᠨᠠᠭ᠎ᠠ', hover: 'Огноо', modern: 'Огноо' },
+    player: { traditional: 'ᠲᠣᠭᠯᠠᠭᠴᠢ', hover: 'Тоглогч', modern: 'Тоглогч' },
+    rank: { traditional: 'ᠵᠡᠷᢉᠡᠯᠡᠯ', hover: 'Зэрэглэл', modern: 'Зэрэглэл' },
+    time: { traditional: 'ᠬᠤᠭᠤᠴᠠᠭ᠎ᠠ', hover: 'Хугацаа', modern: 'Хугацаа' }
   };
 
   const pageText =
